@@ -1,6 +1,7 @@
 package com.example.techspecsapp
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Button
@@ -31,6 +32,7 @@ class LoginActivity : AppCompatActivity() {
             val password = etPassword.text.toString()
             if (login(username, password)) {
                 tvError.visibility = TextView.INVISIBLE
+                startActivity(Intent(this,MainActivity::class.java))
             } else {
                 tvError.visibility = TextView.VISIBLE
             }
@@ -72,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
         } else if (passwordInPrefs == null) {
             tvError.text = getString(R.string.error_user_DNE)
         } else if (passwordInPrefs == password) {
-            Toast.makeText(this, "logged in", Toast.LENGTH_SHORT).show()
             return true
         } else {
             tvError.text = getString(R.string.error_wrong_password)

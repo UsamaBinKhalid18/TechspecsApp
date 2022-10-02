@@ -10,4 +10,6 @@
     <string name="error_user_DNE">Username does not exist.</string>
     <string name="error_wrong_password">Incorrect password.</string>
     <string name="register">register</string>
+    <string name="model">Model : %s</string>
+    <string name="brand">Brand : %s</string>
 </resources>
