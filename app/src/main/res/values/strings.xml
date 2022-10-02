@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">TechspecsApp</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="error_field_empty">One of the fields is empty.</string>
+    <string name="error_invalid_username">Username must start with letter and can only contain letter and digits.</string>
+    <string name="error_duplicate_username">Username already exists.</string>
+    <string name="error_invalid_password">Password is too small</string>
+    <string name="error_user_DNE">Username does not exist.</string>
+    <string name="error_wrong_password">Incorrect password.</string>
+    <string name="register">register</string>
 </resources>
