@@ -16,6 +16,10 @@
         android:theme="@style/Theme.TechspecsApp"
         tools:targetApi="31">
         <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TechspecsApp2"/>
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

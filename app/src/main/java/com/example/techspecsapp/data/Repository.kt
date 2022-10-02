@@ -1,5 +1,6 @@
 package com.example.techspecsapp.data
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.techspecsapp.TechSpecAPI
 import okhttp3.Interceptor
@@ -20,7 +21,7 @@ class Repository private constructor() {
         .addInterceptor(Interceptor { chain ->
             val request: Request =
                 chain.request().newBuilder()
-                    .addHeader("X-BLOBR-KEY", "UOPUMLudykKDLlXALrD52rKXtoxmRgkj").build()
+                    .addHeader("X-BLOBR-KEY", "egDQMPTxAYzTE8PJXzbEkjeA0veJxxJD").build()
             chain.proceed(request)
         }).build()
     private val techSpecAPI = Retrofit.Builder()
@@ -28,9 +29,10 @@ class Repository private constructor() {
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
         .build().create(TechSpecAPI::class.java)
-    val productsList = MutableLiveData<List<SearchProducts>>()
-    fun searchProduct(productName: String, category: String) {
-        val call = techSpecAPI.findProduct(productName, Category(category))
+    val productsList = MutableLiveData<List<SearchProduct>>()
+
+    fun searchProduct(productName: String) {
+        val call = techSpecAPI.findProduct(productName, Category("smartphone"))
         call.enqueue(object : Callback<SearchResponse> {
             override fun onResponse(
                 call: Call<SearchResponse>,
@@ -45,6 +47,24 @@ class Repository private constructor() {
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 productsList.value = emptyList()
             }
+        })
+    }
+    var productDetail=MutableLiveData<ProductDetail>()
+    fun productDetail(productId:String){
+        val call=techSpecAPI.getProductDetail(productId)
+        call.enqueue(object :Callback<DetailResponse>{
+            override fun onResponse(
+                call: Call<DetailResponse>,
+                response: Response<DetailResponse>
+            ) {
+                Log.d("TAG", "onResponse: ----------------=-=-=-=-=")
+                productDetail.value=response.body()!!.data.product[0]
+            }
+
+            override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
+
+            }
+
         })
     }
 

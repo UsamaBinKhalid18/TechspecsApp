@@ -3,11 +3,11 @@ package com.example.techspecsapp.data
 import com.google.gson.annotations.SerializedName
 
 
-data class SearchResponse(val success: Int, val data: SearchResponseData)
+data class SearchResponse(val Success: Int, val data: SearchResponseData)
 
-data class SearchResponseData(val results: List<SearchProducts>)
+data class SearchResponseData(val results: List<SearchProduct>)
 
-data class SearchProducts(
+data class SearchProduct(
     val model: Model,
     val brand: Brand,
     val image_front: ImageUrl,

@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.techspecsapp.DetailActivity
 import com.example.techspecsapp.R
+import com.google.gson.Gson
 
 class SearchRVAdapter() : RecyclerView.Adapter<SearchRVAdapter.SearchViewHolder>() {
-    private var dataset = listOf<SearchProducts>()
+    private var dataset = listOf<SearchProduct>()
 
     inner class SearchViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val ivProduct=view.findViewById<ImageView>(R.id.iv_search)
@@ -33,11 +35,17 @@ class SearchRVAdapter() : RecyclerView.Adapter<SearchRVAdapter.SearchViewHolder>
         val productName=item.model.value.removePrefix(item.brand.value+" ")
         holder.tvModel.text=holder.itemView.context.getString(R.string.model,productName)
         holder.tvBrand.text=holder.itemView.context.getString(R.string.brand,item.brand.value)
+        holder.cvSearch.setOnClickListener{
+            val intent=Intent(it.context,DetailActivity::class.java)
+            val jsonString= Gson().toJson(item)
+            intent.putExtra("SearchProduct",jsonString)
+            it.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int =dataset.count()
 
-    fun updateData(data:List<SearchProducts>){
+    fun updateData(data:List<SearchProduct>){
         dataset=data
         notifyDataSetChanged()
     }
