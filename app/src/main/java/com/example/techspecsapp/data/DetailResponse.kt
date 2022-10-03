@@ -1,19 +1,28 @@
 package com.example.techspecsapp.data
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class DetailResponse(val Success: Int, val data: DetailResponseData)
 
 data class DetailResponseData(val product: List<ProductDetail>)
 
+@Entity(tableName = "product_detail")
+data class ProducDetailWrap(
+    @Embedded val productDetail: ProductDetail,
+    @PrimaryKey val id: String
+)
+
 data class ProductDetail(
-    @SerializedName("Camera") val camera: Camera,
+    @Embedded(prefix = "camera_")
+    @SerializedName("Camera") val camera: Camera?,
     @SerializedName("Design") val design: Map<String, String>?,
     @SerializedName("Display") val display: Map<String, String>?,
-    @SerializedName("Inside") val inside: Inside,
-
-
-    )
+    @Embedded(prefix = "inside_")
+    @SerializedName("Inside") val inside: Inside?,
+)
 
 data class Camera(
     @SerializedName("Back Camera") val backCamera: Map<String, String>?,

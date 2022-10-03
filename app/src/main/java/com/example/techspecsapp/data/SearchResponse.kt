@@ -1,5 +1,8 @@
 package com.example.techspecsapp.data
 
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 
@@ -7,10 +10,16 @@ data class SearchResponse(val Success: Int, val data: SearchResponseData)
 
 data class SearchResponseData(val results: List<SearchProduct>)
 
+@Entity(tableName = "search_product")
 data class SearchProduct(
+    @Embedded(prefix = "model_")
     val model: Model,
+    @Embedded(prefix = "brand_")
     val brand: Brand,
+    @Embedded(prefix = "image_url_")
     val image_front: ImageUrl,
+    @Embedded
+    @PrimaryKey
     val _meta: SearchProductMeta
 )
 

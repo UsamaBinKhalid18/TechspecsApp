@@ -13,10 +13,10 @@ interface TechSpecAPI {
     @POST("product/search")
     fun findProduct(
         @Query("query") productName: String,
-        @Body category:Category
+        @Body category: Category
     ): Call<SearchResponse>
 
     @GET("product/detail")
-    fun getProductDetail(@Query("productId") productId:String):Call<DetailResponse>
+    fun getProductDetail(@Query("productId") productId: String): Call<DetailResponse>
 
 }

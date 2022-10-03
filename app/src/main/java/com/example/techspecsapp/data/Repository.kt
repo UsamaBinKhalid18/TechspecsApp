@@ -1,8 +1,8 @@
 package com.example.techspecsapp.data
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.techspecsapp.TechSpecAPI
+import com.example.techspecsapp.data.database.ProductDatabase
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -13,7 +13,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Repository private constructor() {
+class Repository private constructor(private val database: ProductDatabase) {
+
     private val httpLoggingInterceptor = HttpLoggingInterceptor()
         .also { it.level = HttpLoggingInterceptor.Level.BODY }
     private val okHttpClient = OkHttpClient.Builder()
@@ -21,7 +22,7 @@ class Repository private constructor() {
         .addInterceptor(Interceptor { chain ->
             val request: Request =
                 chain.request().newBuilder()
-                    .addHeader("X-BLOBR-KEY", "egDQMPTxAYzTE8PJXzbEkjeA0veJxxJD").build()
+                    .addHeader("X-BLOBR-KEY", "ZZsZnG4vTzLFuYoDxE82s2nrFbeJgE2C").build()
             chain.proceed(request)
         }).build()
     private val techSpecAPI = Retrofit.Builder()
@@ -44,21 +45,23 @@ class Repository private constructor() {
                 }
             }
 
+
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 productsList.value = emptyList()
             }
         })
     }
-    var productDetail=MutableLiveData<ProductDetail>()
-    fun productDetail(productId:String){
-        val call=techSpecAPI.getProductDetail(productId)
-        call.enqueue(object :Callback<DetailResponse>{
+
+    var productDetail = MutableLiveData<ProductDetail>()
+
+    fun productDetail(productId: String) {
+        val call = techSpecAPI.getProductDetail(productId)
+        call.enqueue(object : Callback<DetailResponse> {
             override fun onResponse(
                 call: Call<DetailResponse>,
                 response: Response<DetailResponse>
             ) {
-                Log.d("TAG", "onResponse: ----------------=-=-=-=-=")
-                productDetail.value=response.body()!!.data.product[0]
+                productDetail.value = response.body()!!.data.product[0]
             }
 
             override fun onFailure(call: Call<DetailResponse>, t: Throwable) {
@@ -68,15 +71,31 @@ class Repository private constructor() {
         })
     }
 
+    fun productDetailOffline(productId: String): ProductDetail {
+        val wrap = database.productDetailDao().getProductDetails(productId)
+        return wrap[0].productDetail
+    }
+
+    fun insertProduct(searchProduct: SearchProduct, detail: ProductDetail) {
+        database.searchResponseDao().insertResponse(searchProduct)
+        database.productDetailDao()
+            .insertProductDetail(ProducDetailWrap(detail, searchProduct._meta.id))
+    }
+
+    fun getAllResponsesFromDB(): List<SearchProduct> {
+        return database.searchResponseDao().getAllResponses()
+    }
+
+
     companion object {
         @Volatile
         private var INSTANCE: Repository? = null
-        fun getInstance(): Repository {
+        fun getInstance(database: ProductDatabase): Repository {
             val temp = INSTANCE
             if (temp != null) {
                 return temp
             } else synchronized(this) {
-                val instance = Repository()
+                val instance = Repository(database)
                 INSTANCE = instance
                 return instance
             }

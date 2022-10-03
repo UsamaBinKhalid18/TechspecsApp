@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 
+
 class LoginActivity : AppCompatActivity() {
     private val preferences: SharedPreferences by lazy {
         getSharedPreferences(
@@ -22,7 +23,6 @@ class LoginActivity : AppCompatActivity() {
     private val etPassword: TextInputEditText by lazy { findViewById(R.id.et_password) }
     private val tvError: TextView by lazy { findViewById(R.id.tv_error) }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
             val password = etPassword.text.toString()
             if (login(username, password)) {
                 tvError.visibility = TextView.INVISIBLE
-                startActivity(Intent(this,MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             } else {
                 tvError.visibility = TextView.VISIBLE
             }
@@ -52,14 +52,14 @@ class LoginActivity : AppCompatActivity() {
     private fun register(username: String, password: String): Boolean {
         if (username.isEmpty() || password.isEmpty()) {
             tvError.text = getString(R.string.error_field_empty)
-        } else if(!username.isValidUsername()){
-            tvError.text=
+        } else if (!username.isValidUsername()) {
+            tvError.text =
                 getString(R.string.error_invalid_username)
-        } else if(preferences.getString(username,null)!=null) {
+        } else if (preferences.getString(username, null) != null) {
             tvError.text = getString(R.string.error_duplicate_username)
-        }else if(!password.isValidPassword()){
-            tvError.text=getString(R.string.error_invalid_password)
-        }else{
+        } else if (!password.isValidPassword()) {
+            tvError.text = getString(R.string.error_invalid_password)
+        } else {
             editor.putString(username, password).apply()
             Toast.makeText(this, "Registered", Toast.LENGTH_SHORT).show()
             return true

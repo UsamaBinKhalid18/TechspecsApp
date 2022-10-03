@@ -12,4 +12,6 @@
     <string name="register">register</string>
     <string name="model">Model : %s</string>
     <string name="brand">Brand : %s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
