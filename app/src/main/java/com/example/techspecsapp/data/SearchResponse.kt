@@ -27,3 +27,7 @@ data class Model(@SerializedName("raw") val value: String)
 data class Brand(@SerializedName("raw") val value: String)
 data class ImageUrl(@SerializedName("raw") val value: String)
 data class SearchProductMeta(val score: Float, val id: String)
+
+@Entity(tableName = "user_product", primaryKeys =["productId","username"])
+data class UserToProduct(val productId:String,
+                         val username:String)

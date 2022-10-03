@@ -1,4 +1,4 @@
-package com.example.techspecsapp.data.database
+package com.example.techspecsapp.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

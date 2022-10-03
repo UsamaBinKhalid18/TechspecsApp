@@ -2,6 +2,7 @@ package com.example.techspecsapp.data
 
 import androidx.lifecycle.MutableLiveData
 import com.example.techspecsapp.TechSpecAPI
+import com.example.techspecsapp.data.database.BookmarkDataBase
 import com.example.techspecsapp.data.database.ProductDatabase
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,8 +14,8 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class Repository private constructor(private val database: ProductDatabase) {
-
+class Repository private constructor(private val database: ProductDatabase,val bookmarkDataBase: BookmarkDataBase) {
+    var username:String=""
     private val httpLoggingInterceptor = HttpLoggingInterceptor()
         .also { it.level = HttpLoggingInterceptor.Level.BODY }
     private val okHttpClient = OkHttpClient.Builder()
@@ -44,7 +45,6 @@ class Repository private constructor(private val database: ProductDatabase) {
                     productsList.value = searchResponse.data.results
                 }
             }
-
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
                 productsList.value = emptyList()
@@ -86,16 +86,25 @@ class Repository private constructor(private val database: ProductDatabase) {
         return database.searchResponseDao().getAllResponses()
     }
 
+    fun getBookmarkResponses(): List<SearchProduct> {
+        return bookmarkDataBase.userToProductDao().getBookmarkSearchResponse(username)
+    }
+
+    fun insertBookmark(item: SearchProduct) {
+        bookmarkDataBase.userToProductDao().insertUserToProduct(UserToProduct(item._meta.id,username))
+        bookmarkDataBase.productDetailDao().insertProductDetail(ProducDetailWrap(productDetail.value!!,item._meta.id))
+        bookmarkDataBase.searchResponseDao().insertResponse(item)
+    }
 
     companion object {
         @Volatile
         private var INSTANCE: Repository? = null
-        fun getInstance(database: ProductDatabase): Repository {
+        fun getInstance(database: ProductDatabase,bookmarkDataBase: BookmarkDataBase): Repository {
             val temp = INSTANCE
             if (temp != null) {
                 return temp
             } else synchronized(this) {
-                val instance = Repository(database)
+                val instance = Repository(database,bookmarkDataBase)
                 INSTANCE = instance
                 return instance
             }

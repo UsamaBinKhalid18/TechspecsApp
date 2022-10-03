@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.techspecsapp.data.MyReceiver
 import com.example.techspecsapp.data.Repository
 import com.example.techspecsapp.data.TabsAdapter
+import com.example.techspecsapp.data.database.BookmarkDataBase
 import com.example.techspecsapp.data.database.ProductDatabase
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,14 +20,15 @@ class MainActivity : AppCompatActivity() {
         Repository.getInstance(
             ProductDatabase.getInstance(
                 applicationContext
-            )
+            ),
+            BookmarkDataBase.getInstance(applicationContext)
         )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        repository.username= intent.getStringExtra("username")?:""
         val viewPager = findViewById<ViewPager2>(R.id.view_pager)
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
 
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Search"
+                2->"Bookmark"
                 else -> "Recent"
             }
         }.attach()

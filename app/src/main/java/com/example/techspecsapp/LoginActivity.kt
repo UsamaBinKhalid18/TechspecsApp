@@ -32,7 +32,9 @@ class LoginActivity : AppCompatActivity() {
             val password = etPassword.text.toString()
             if (login(username, password)) {
                 tvError.visibility = TextView.INVISIBLE
-                startActivity(Intent(this, MainActivity::class.java))
+                val intent=Intent(this, MainActivity::class.java)
+                intent.putExtra("username",username)
+                startActivity(intent)
             } else {
                 tvError.visibility = TextView.VISIBLE
             }

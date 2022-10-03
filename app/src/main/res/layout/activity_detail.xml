@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetailActivity">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,15 +31,23 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tlb_detail_activity"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize" />
+                android:layout_height="?attr/actionBarSize"
+                />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-     <FrameLayout
+     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <ExpandableListView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+         android:orientation="vertical">
+         <Button
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:id="@+id/bt_bookmark"
+             android:text="bookmark"
+             android:layout_gravity="center_horizontal"/>
+         <ExpandableListView
                 android:id="@+id/expandable_list_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -48,6 +55,6 @@
                 android:dividerHeight="0.5dp"
                 android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
                 android:nestedScrollingEnabled="true" />
-        </FrameLayout>
+     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

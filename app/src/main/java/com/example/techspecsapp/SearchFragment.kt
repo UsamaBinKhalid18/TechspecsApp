@@ -25,7 +25,6 @@ class SearchFragment(val repository: Repository) : Fragment() {
         view.findViewById<android.widget.SearchView>(R.id.search_view)
             .setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(string: String): Boolean {
-
                     repository.searchProduct(string)
                     repository.productsList.observe(this@SearchFragment.viewLifecycleOwner) {
                         adapter.updateData(it)

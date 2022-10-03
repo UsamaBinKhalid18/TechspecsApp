@@ -1,11 +1,13 @@
 package com.example.techspecsapp
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ExpandableListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.techspecsapp.data.*
+import com.example.techspecsapp.data.database.BookmarkDataBase
 import com.example.techspecsapp.data.database.ProductDatabase
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
@@ -18,7 +20,8 @@ class DetailActivityOffline : AppCompatActivity() {
         Repository.getInstance(
             ProductDatabase.getInstance(
                 applicationContext
-            )
+            ),
+            BookmarkDataBase.getInstance(applicationContext)
         )
     }
 
@@ -42,8 +45,10 @@ class DetailActivityOffline : AppCompatActivity() {
             Glide.with(this@DetailActivityOffline).load(item.image_front.value)
                 .into(findViewById(R.id.iv_product))
         }
-
+        findViewById<Button>(R.id.bt_bookmark).setOnClickListener{
+            lifecycleScope.launch(Dispatchers.IO){
+                repository.insertBookmark(item)
+            }
+        }
     }
-
-
 }
